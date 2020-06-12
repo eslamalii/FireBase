@@ -5,10 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -63,13 +67,38 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                if (user != null){
+                if (user != null) {
                     Log.d(TAG, "user signed in");
-                }else{
+                } else {
 
                 }
             }
         };
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String emailString = email.getText().toString();
+                String psw = password.getText().toString();
+
+                if (!emailString.equals("") && !psw.equals("")) {
+                    auth.signInWithEmailAndPassword(emailString, psw)
+                            .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                    if (!task.isSuccessful()) {
+                                        Toast.makeText(MainActivity.this, "Failed sign in", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(MainActivity.this, "Signed in", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            });
+                }
+
+            }
+        });
 
     }
 
@@ -83,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        if(authStateListener != null){
+        if (authStateListener != null) {
             auth.removeAuthStateListener(authStateListener);
         }
     }
