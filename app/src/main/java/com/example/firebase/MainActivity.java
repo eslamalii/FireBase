@@ -49,18 +49,18 @@ public class MainActivity extends AppCompatActivity {
 
         databaseReference.setValue("it works!");
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String value = dataSnapshot.getValue(String.class);
-                Toast.makeText(MainActivity.this, value, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                String value = dataSnapshot.getValue(String.class);
+//                Toast.makeText(MainActivity.this, value, Toast.LENGTH_LONG).show();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String emailString = email.getText().toString();
+                final String emailString = email.getText().toString();
                 String psw = password.getText().toString();
 
                 if (!emailString.equals("") && !psw.equals("")) {
@@ -92,7 +92,9 @@ public class MainActivity extends AppCompatActivity {
                                     } else {
                                         Toast.makeText(MainActivity.this, "Signed in", Toast.LENGTH_SHORT).show();
 
-                                        databaseReference.setValue("Hey ");
+                                        Customer customer = new Customer("Leo", "Fw", emailString, 50);
+
+                                        databaseReference.setValue(customer);
                                     }
 
                                 }
