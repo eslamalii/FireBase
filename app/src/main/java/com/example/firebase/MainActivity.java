@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
                                         Toast.makeText(MainActivity.this, "Failed sign in", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(MainActivity.this, "Signed in", Toast.LENGTH_SHORT).show();
+
+                                        databaseReference.setValue("Hey ");
                                     }
 
                                 }
